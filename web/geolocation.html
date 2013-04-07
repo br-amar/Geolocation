@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <script src="../js/jquery-1.9.1.min.js"></script>
+        <script src="../js/bustops.json"></script>
+        <script>
+            jQuery(window).ready(function() {
+                jQuery("#submit").click(handle_geolocation_query);
+            });
+
+
+            function handle_errors(error) {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        alert("User did not share geolocation data")
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        alert("Could not detect current position")
+                        break;
+                    case error.TIMEOUT:
+                        alert("retrieving position time out")
+                        break;
+                    default:
+                        alert("unknown error");
+                        break;
+                }
+            }
+
+            //            function handle_geolocation_query(position) {
+            //                alert('Lat: ' + position.coords.latitude + ' ' +
+            //                    'Lon: ' + position.coords.longitude);
+            //            }
+
+            function handle_geolocation_query(position) {
+                var latitude = 12.87518;
+                var longitude = 77.61697;
+
+                //                var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + "," + position.coords.longitude + "&zoom=14&size=300x400&markers=color:blue|label:S|" + position.coords.latitude + ',' + position.coords.longitude;
+                var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + latitude + "," + longitude + "&zoom=14&size=300x400&markers=color:red|label:.|" + latitude + ',' + longitude;
+                jQuery("#map").remove();
+                jQuery(document.body).append(
+                jQuery(document.createElement("img")).attr("src", image_url).attr('id', 'map'));
+            }
+        </script>
+    </head>
+    
+    <body>
+        <button id="submit">showMap</button>
+    </body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <title>Reverse Geolocation</title>
+        <h1>Get latitude and longitude of any given address:</h1>
+        <script src="../js/jquery-1.9.1.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
+        <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    </head>
+    <script>
+        $(document).ready(function() {
+
+            // wire up button click
+            $('#go').click(function() {
+                // get the address the user entered
+                var address = $('#address').val();
+                if (address) {
+                    // use Google Maps API to geocode the address
+                    // set up the Geocoder object
+                    var geocoder = new google.maps.Geocoder();
+                    // return the coordinates
+                    geocoder.geocode({
+                        'address': address
+                    }, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            if (results[0]) {
+                                // print results
+                                printLatLong(results[0].geometry.location.lat(),
+                                results[0].geometry.location.lng());
+                            } else {
+                                error('Google did not return any results.');
+                            }
+
+                        } else {
+                            error("Reverse Geocoding failed due to: " + status);
+                        }
+                    });
+                } else {
+                    error('Please enter an address');
+                }
+            });
+
+        });
+
+        // output lat and long
+        function printLatLong(latitude, longitude) {
+            $('body').append('<p>Lat: ' + latitude + '</p>');
+            $('body').append('<p>Long: ' + longitude + '</p>');
+            var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + latitude + "," + longitude + "&zoom=14&size=300x400&markers=color:red|label:.|" + latitude + ',' + longitude;
+            jQuery("#map").remove();
+            jQuery(document.body).append(
+            jQuery(document.createElement("img")).attr("src", image_url).attr('id', 'map'));
+        }
+
+        function error(msg) {
+            alert(msg);
+        }
+    </script>
+    
+    <body>
+        <div>
+            <label for="address">Enter an address:</label>
+            <input type="text" id="address">
+        </div>
+        <div>
+            <input type="button" id="go" value="Click me to find Latitude and Longitude">
+        </div>
+    </body>
+
+</html>
